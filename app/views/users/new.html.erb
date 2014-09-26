@@ -1,0 +1,26 @@
+<h1>new user</h1>
+
+
+
+<%= form_for :user, url: users_path do |f| %>
+<%= render 'shared/error_messages' %>
+  <p>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </p>
+ 
+  <p>
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </p>
+
+<%= f.label :password %><br>
+<%= f.password_field :password%><br>
+
+<%= f.label :password_confirmation, "Confirmation" %><br>
+<%= f.password_field :password_confirmation %>
+ 
+  <p>
+    <%= f.submit "Create my account"%>
+  </p>
+<% end %>
