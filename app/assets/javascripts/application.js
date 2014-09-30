@@ -16,3 +16,17 @@
 //= require underscore
 //= require gmaps/google
 //= require_tree .
+//= require searchBar.js
+function initialize(latitude, longitude) {
+  var mapOptions = {
+      center: new google.maps.LatLng(latitude, longitude),
+      zoom: 5,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var map = new google.maps.Map(document.getElementById("map_canvas"),
+      mapOptions);
+}
+
+$(function() {
+  initialize(latitude, longitude);
+});
