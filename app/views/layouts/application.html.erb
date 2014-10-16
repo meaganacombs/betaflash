@@ -12,10 +12,10 @@
   <header class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
         <div class="container">
-          <%= link_to "BETAFLASH", '/pin/index', id: "logo" %>
+          <%= link_to "BETAFLASH", '/pins', id: "logo" %>
           <nav>
             <ul class="nav pull-right" >
-              <li class = "nav"><%= link_to "Home",    '/pin/index' %></li>
+              <li class = "nav"><%= link_to "Home",    '/pins' %></li>
                <% if signed_in? %>
                <li class = "nav">
                   <%= link_to "Sign out", signout_path, method: "delete" %>

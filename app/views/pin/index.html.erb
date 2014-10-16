@@ -1,13 +1,11 @@
-<script src="app/assests/javascripts/searchBar.js"></script>
+
 <h1>Pin#index</h1>
-<p>Find me in app/views/pin/index.html.erb</p>
+<p>double click on map to add pin!</p>
 
 <div class="row">
   <div class="col-lg-6">
     <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Add pin!</button>
-      </span>
+      
       <input type="text" class="form-control">
     </div>
   </div>
@@ -18,15 +16,96 @@
 <div style='width: 800px;'>
   <div id="map" style='width: 800px; height: 400px;'></div>
 </div>
+
 <script type="text/javascript">
+  
+  $( document ).ready(function() {
+     var raw_markers = <%=raw @hash.to_json %>;
+});
+  
+  
+  
   handler = Gmaps.build('Google');
-  handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+  handler.buildMap({ provider: {mapTypeId:google.maps.MapTypeId.SATELLITE}, internal: {id: 'map'}}, 
+                   function(){
     markers = handler.addMarkers(<%=raw @hash.to_json %> );
     handler.bounds.extendWith(markers);
     handler.fitMapToBounds();
     handler.getMap().setZoom(5);
+   google.maps.event.addListener(handler.getMap(), "dblclick", function(event){
+          placeMarker(event.latLng);
+        });
+  function placeMarker(latLng) {
+        var marker = new google.maps.Marker({
+          position: latLng, 
+          map: handler.getMap(),
+          draggable: true
+        });
+    console.log("lat:" + latLng.lat() + "long:" + latLng.lng()) ;   
+    
+//     $.post({
+//       data:  encodeURI({ latitude: latLng.lat(), longitude: latLng.lng()}),
+//       url: "/pin/create",
+//       type: 'post',
+//       dataType: 'json',
+      
+//     });
+    
+      $.get ("/pins/new", 
+      {
+        latitude: latLng.lat(),
+        longitude: latLng.lng()
+      });
+    
+      //$.ajax({
+      //  type: "POST",
+      //  url: "/pin/create",
+      //  data: { latitude: latLng.lat(), longitude: latLng.lng() },
+        
+        
+    //});
+        //markersArray.push(marker);
+        // Set and open infowindow
+        var infowindow = new google.maps.InfoWindow({
+          content: 'latitude:' + latLng.lat() + '<br>longitude:' + latLng.lng()
+        });
+        infowindow.open(handler.getMap(), marker);
+   }
+    
+                     
+     
+                     
+                     
+    
   });
 </script>
+
+<% content_for :scripts do %>
+<script type= "text/javascript">
+  
+   Gmaps.map.callback = function() {
+      google.maps.event.addListener(handler.getMap(), 'click', function(event) {
+          
+          placeMarker(event.latLng);
+          
+        });
+   };
+  
+   function placeMarker(latLng) {
+        var marker = new google.maps.Marker({
+          position: latLng, 
+          map: handler.getMap(),
+          draggable: true
+        });
+        //markersArray.push(marker);
+        // Set and open infowindow
+        var infowindow = new google.maps.InfoWindow({
+          content: 'hi'
+        });
+        infowindow.open(handler.getMap(), marker);
+   }
+</script>
+<% end %>
 
 
 
