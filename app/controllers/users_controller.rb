@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     if @user.save
       sign_in @user
       flash[:success] = "welcome to BetaFlash"
-      redirect_to '/pin'
+      redirect_to '/pins'
     else
       render 'new'
     end
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
-   
+    #@pins = User.pins
   end
   
   

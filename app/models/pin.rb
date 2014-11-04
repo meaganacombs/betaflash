@@ -5,9 +5,9 @@ class Pin < ActiveRecord::Base
   reverse_geocoded_by :latitude, :longitude
   after_validation :geocode, :reverse_geocode
 
-  has_one :user
+ # has_and_belongs_to_many :users
   
-  #belongs_to :user
+  belongs_to :user
   default_scope -> { order('created_at DESC') }
   #validates :user_id, presence: true
   #validates :activity_type, presence: true

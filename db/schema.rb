@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141013232740) do
+ActiveRecord::Schema.define(version: 20141103220100) do
 
   create_table "pins", force: true do |t|
     t.float    "latitude"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20141013232740) do
     t.datetime "updated_at"
     t.string   "activity_type"
     t.integer  "user_id"
+    t.text     "comment"
   end
 
   create_table "users", force: true do |t|
