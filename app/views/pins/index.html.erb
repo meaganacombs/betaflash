@@ -23,6 +23,8 @@
   var allmarkers = [];
   var markerObjs = [];
   var userId = <%= @id %>;
+  var visitedPins = "<%= @pinsVisited %>";
+  //var pins_visited = <%= @pinsVisited %>; 
   handler = Gmaps.build('Google');
   handler.buildMap(
         { 
@@ -37,12 +39,6 @@
         var markers = [];
         
         
-        //add markers using gmaps4rails addMarkers func
-   //  markers = handler.addMarkers(<%=raw @hash.to_json %> );
-                              
-    //handler.bounds.extendWith(markers);
-    //handler.fitMapToBounds();
-    //handler.getMap().setZoom(5);
     google.maps.event.addListener(handler.getMap(), "dblclick", function(event){
           placeMarker(event.latLng);
         });
@@ -153,14 +149,16 @@
     
         google.maps.event.addListener(marker, 'click', (function() {
           
-          var html = '<span>most recent comment:<input type="text" name="comment"></span></br>Activity Type: ' + this.activity_type + '<br>Located in: ' + this.address + '</br><button type="button" id = "deletePin">remove this pin</button>&nbsp&nbsp<button type = "button" id="addDetails">add more details</button>'; 
+          var html = '<span>most recent comment:<input type="text" name="comment"></span></br>Activity Type: ' + this.activity_type + '<br>Located in: ' + this.address + '</br><input type="checkbox" id="visitedCheckbox">&nbsp&nbspI have visited this site!<br><button type="button" id = "deletePin">remove this pin</button>&nbsp&nbsp<button type = "button" id="addDetails">add more details</button>'; 
           infowindow.setContent(html);
-          infowindow.set("id", this.id)
+          infowindow.set("id", this.id);
+          infowindow.set("user_id", this.user_id);
          
           google.maps.event.addListener(infowindow, 'domready', function() {
             var id = infowindow.id;
             
           $("#deletePin").click(function(){ 
+            if (userId === infowindow.user_id ) {
             $.ajax({
               url: "/pins/"+ infowindow.id,
               type: 'delete', 
@@ -169,10 +167,14 @@
               event.preventDefault();
            
              findMarker(id).setMap(null);
-  
+            }
+            else {
+              alert("You didn't create this pin, so you cannot delete it. Please add comments!");
+            }
           });
             
             $("#addDetails").click(function(){
+              if(userId === infowindow.user_id) {
               $.ajax({
                 url: "/pins/"+infowindow.id+"/edit",
                 type: 'get',
@@ -180,9 +182,20 @@
                 success: function() {
                   window.location = "/pins/" + infowindow.id + "/edit" 
                 }
-                
               })
-              
+              }
+              else {
+                alert("You didn't create this pin, so you can't add more details. Please add comments!");
+              }
+            });
+            
+            $("#visitedCheckbox").click(function(){
+               visitedPins = visitedPins + ',' + infowindow.id;
+              $.ajax({
+                url: '/users/' + userId + '/updatePinsVisited/' + infowindow.id,
+                type: 'put', 
+                data: {pinId : infowindow.id},
+              })
             });
          });//domready
           function findMarker(id){
@@ -268,6 +281,19 @@ function showMarkers() {
        }
     }
     
+    else if (x === "PINSVISITED") {
+      for(i = 0; i< markerObjs.length; i++) {
+        var n = visitedPins;
+        var m = n.indexOf(markerObjs[i].id);
+        if(m>-1){
+          markerObjs[i].setMap(map);
+        }
+        else {
+          markerObjs[i].setMap(null);
+        }
+      }
+    }
+    
     else {
         for( i = 0; i < markerObjs.length; i++ ) {
           var act = markerObjs[i].activity_type;
@@ -295,9 +321,10 @@ function showMarkers() {
       <span>
         Select an activity type to filter pins on map: 
       <select id = "activity_dropdown" onchange = "filterPins();">
-        <option value = "showAll">show all markers</option>
-        <option value = "hideAll">hide all markers</option>
-        <option value = "myMarkers">see pins I've dropped</option>
+        <option value = "showAll">show all pins</option>
+        <option value = "hideAll">hide all pins</option>
+        <option value = "myMarkers">pins I've dropped</option>
+        <option value = "pinsVisited">pins I've visited</option>
         <option value="climbing">climbing</option>
         <option value = "running">running</option>
         <option value = "hiking">hiking</option>

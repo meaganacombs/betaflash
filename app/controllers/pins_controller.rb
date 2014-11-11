@@ -1,6 +1,6 @@
 class PinsController < ApplicationController
-  before_action :signed_in_user, only: [:create, :update, :edit]
-  
+  before_action :signed_in_user, only: [:create, :update, :edit, :destroy]
+
 
   
 #   def new 
@@ -63,6 +63,7 @@ end
     #update
    # return
     #end
+    @user =  current_user
     @pin = current_user.pins.find_by(id: params[:id])
     
   end
@@ -85,6 +86,7 @@ end
     #debugger
     @current_pin ||= Pin.find_by(id: params[:id])
     @id = current_user.id
+    @pinsVisited = current_user.pins_visited
     @pin = Pin.new
     @pins = Pin.all
     @hash = Gmaps4rails.build_markers(@pins) do |pin, marker|
@@ -94,8 +96,8 @@ end
       marker.json({ :activity_type => pin.activity_type})
       marker.json({ :address => pin.address})
       marker.json({ :user_id => pin.user_id})
-      
-    end
+      end
+    
   end
   
   

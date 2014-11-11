@@ -18,11 +18,12 @@
               <li class = "nav"><%= link_to "Home",    '/pins' %></li>
                <% if signed_in? %>
                <li class = "nav">
-                  <%= link_to "Sign out", signout_path, method: "delete" %>
-                </li>
-              <li class = "nav">
                 <%= link_to "Edit Account",  edit_user_path(current_user)%>
               </li>
+               <li class = "nav">
+                  <%= link_to "Sign out", signout_path, method: "delete" %>
+                </li>
+             
             
           <% else %>
             <li><%= link_to "Sign in", signin_path %></li>

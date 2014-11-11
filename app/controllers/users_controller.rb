@@ -19,6 +19,18 @@ class UsersController < ApplicationController
     end
   end
   
+  def updatePinsVisited
+  
+    @user = User.find(params[:id])
+    pinId = params[:pinId]
+    pins_visited = @user.pins_visited + "," + pinId.to_s
+    @user.update_attribute(:pins_visited, pins_visited)
+    #@user.pins_visited = @user.pins_visited + " " + pinId.to_s
+    @user.save
+    render '/pins'
+  end
+  
+  
   
   def create
     @user = User.new(user_params)
@@ -34,7 +46,7 @@ class UsersController < ApplicationController
    def destroy
     User.find(params[:id]).destroy
     flash[:success] = "User deleted."
-     redirect_to '/pins'
+     redirect_to '/signup'
      
   end
   
