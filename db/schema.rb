@@ -11,7 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141104195840) do
+ActiveRecord::Schema.define(version: 20141127022938) do
+
+  create_table "comments", force: true do |t|
+    t.text     "content"
+    t.integer  "pin_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "controllers", force: true do |t|
+    t.string   "Comments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "pins", force: true do |t|
     t.float    "latitude"
@@ -21,7 +35,7 @@ ActiveRecord::Schema.define(version: 20141104195840) do
     t.datetime "updated_at"
     t.string   "activity_type"
     t.integer  "user_id"
-    t.text     "comment"
+    t.string   "name"
   end
 
   create_table "users", force: true do |t|

@@ -12,7 +12,9 @@ section {
 }
 
 textarea {
-  resize: vertical;
+  resize: none;
+  width: 500px; 
+  height: 150px;
 }
 
 .center {
@@ -28,19 +30,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 3em;
+  font-size: 2.5em;
   letter-spacing: -2px;
   margin-bottom: 30px;
   text-align: center;
 }
 
 h2 {
-  font-size: 1.2em;
+  font-size: 1.6em;
   letter-spacing: -1px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   text-align: center;
   font-weight: normal;
-  color: #999;
+  color: #004700;
+}
+
+h5 {
+  text-align: center;
+  color: #004700;
 }
 
 p {
@@ -67,5 +74,15 @@ p {
   text-decoration: none;
 }
 
+table {
+  background-color: #ADEBAD;
+  border: 1px black;
+}
 
-
+#commentHeader {
+    background-color: lightgrey;
+    padding: 15px;
+    border: 5px solid black;
+    margin: 25px;
+    align: center;
+}

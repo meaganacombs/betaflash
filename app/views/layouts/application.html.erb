@@ -12,10 +12,10 @@
   <header class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
         <div class="container">
-          <%= link_to "BETAFLASH", '/pins', id: "logo" %>
+          <%= link_to "BETAFLASH", '/pins', id: "logo", 'data-no-turbolink' => true %>
           <nav>
             <ul class="nav pull-right" >
-              <li class = "nav"><%= link_to "Home",    '/pins' %></li>
+              <li class = "nav"><%= link_to "Home", '/pins', 'data-no-turbolink' => true %></li>
                <% if signed_in? %>
                <li class = "nav">
                 <%= link_to "Edit Account",  edit_user_path(current_user)%>
@@ -34,7 +34,17 @@
       </div>
     </header>
     <div class="container">
-      <%= yield %>
+      
+      
+  <% if flash[:alert] %>
+    <p class="flash-error"><%= flash[:alert] %></p>
+  <% end %>
+  <% if flash[:notice] %>
+    <p class="flash-notice"><%= flash[:notice] %></p>
+  <% end %>
+  <%= yield %>
+
+      
     </div>
 
 </body>

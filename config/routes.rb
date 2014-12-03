@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
   resources :pins
+  resources :comments
   # You can have the root of your site routed with "root"
   root 'sessions#new'
   match '/users', to: 'users#show', via: 'get'
@@ -13,6 +14,8 @@ Rails.application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: 'delete'
   match '/pin/index', to: 'pin#index', via: 'get'
   match '/pin/create', to: 'pin#create', via: 'post'
+  match '/pins/show', to: 'pins#show', via: 'get'
+  
 
 
   # Example of regular route:

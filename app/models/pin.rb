@@ -8,6 +8,7 @@ class Pin < ActiveRecord::Base
  # has_and_belongs_to_many :users
   
   belongs_to :user
+  has_many :comments
   default_scope -> { order('created_at DESC') }
   #validates :user_id, presence: true
   #validates :activity_type, presence: true

@@ -28,34 +28,43 @@ class PinsController < ApplicationController
     
 #   end
   def show
-    @pin=Pin.new
+    @user =  current_user
+    @pin=Pin.find(params[:id])
+    if(@pin.activity_type.nil?)
+      @pin.activity_type = "activity type not set"
+    end
+    if(@pin.name.nil?)
+      @pin.name = "site not yet named"
+    end
+    @comments = @pin.comments
   end
   
-    def create
-
+  def create
     @pin = Pin.new(pin_params)
-
-    if @pin.save
-        # save was successful
-        
-      render '/pins'
-        else
-        # If we have errors render the form again   
-        render 'new'
+    @pins = Pin.all
+    respond_to do |format|
+     if @pin.save
+       redirect_to '/pins'
+      # save was successful
+      format.json {@pins << @pin}
+      
+     end
     end
-end
+      
+#     else
+#       # If we have errors render the form again   
+#       render 'new'
+#     end
+    
+  end
 
 def new 
   render nothing: true
     if pin_params
         # If data submitted already by the form we call the create method
-        create
+        #create
         return
     end
-
-    @pin = Pin.new
-
-    #render 'new' # call it explicit
 end
   
   def edit
@@ -65,6 +74,7 @@ end
     #end
     @user =  current_user
     @pin = current_user.pins.find_by(id: params[:id])
+    
     
   end
   
@@ -96,6 +106,7 @@ end
       marker.json({ :activity_type => pin.activity_type})
       marker.json({ :address => pin.address})
       marker.json({ :user_id => pin.user_id})
+      marker.json({ :comments => pin.comments })
       end
     
   end
@@ -116,7 +127,7 @@ end
   
   private 
   def pin_params
-    params.require(:pin).permit(:latitude, :longitude, :user_id, :activity_type, :comment)
+    params.require(:pin).permit(:latitude, :longitude, :user_id, :activity_type, :comment, :name)
     end
   def id_params
     params.require(:pin).permit(:id)
