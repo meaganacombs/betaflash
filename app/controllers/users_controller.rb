@@ -1,15 +1,17 @@
 class UsersController < ApplicationController
   before_action :signed_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update, :destroy]
+  
+  #/users/new(.:format) get
   def new
     @user=User.new
   end
   
+  #calls signed_in_user and correct_user, '/users/edit/1' get
   def edit
-   
-  end
+   end
   
-  
+  #'/users/:id(.:format)' put  
   def update
      if @user.update_attributes(user_params)
       flash[:success] = "Profile updated"
@@ -19,8 +21,9 @@ class UsersController < ApplicationController
     end
   end
   
+  #action called when visited checkbox gets clicked, put,
+  #'/users/1/updatePinsVisited/2
   def updatePinsVisited
-  
     @user = User.find(params[:id])
     pinId = params[:pinId]
     pins_visited = @user.pins_visited + "," + pinId.to_s
@@ -31,7 +34,7 @@ class UsersController < ApplicationController
   end
   
   
-  
+  #/users(.:format), post
   def create
     @user = User.new(user_params)
     if @user.save
@@ -42,7 +45,7 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
-  
+  #users/:id, delete
    def destroy
     User.find(params[:id]).destroy
     flash[:success] = "User deleted."
@@ -51,6 +54,7 @@ class UsersController < ApplicationController
   end
   
   private
+  #params required to make a new user
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end

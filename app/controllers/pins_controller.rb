@@ -1,32 +1,7 @@
 class PinsController < ApplicationController
   before_action :signed_in_user, only: [:create, :update, :edit, :destroy]
 
-
-  
-#   def new 
-#     @pin = Pin.new
-#   end
-  
-#   def create
-   
-#     debugger
-  
-#     @pin = Pin.new(pin_params)
-#     #flash[:notice] = "#{@pin.latitude}"
-#     respond_to do |format|
-#       if @pin.save
-
-#         format.html { redirect_to @pin, notice: "Save process completed!" }
-#         format.json { render json: @pin }
-#       else
-#         format.html { render :new }
-#         #, flash.now[:notice]="Save proccess coudn't be completed!"
-#         format.json { render json: @pin.errors}
-#       end
-    
-#     end
-    
-#   end
+  #action linked to viewing comments, sets comments instance to the current pins comments (has_many relationship), get, '/pins/1(.:format)' 
   def show
     @user =  current_user
     @pin=Pin.find(params[:id])
@@ -39,45 +14,34 @@ class PinsController < ApplicationController
     @comments = @pin.comments
   end
   
+  #action called when user selects "save pin" after double clicking map, requires params :latitude, :longitude, :user_id, :activity_type, :comment, :name, post, '/pins(.:format)'
   def create
     @pin = Pin.new(pin_params)
     @pins = Pin.all
     respond_to do |format|
      if @pin.save
+         # save was successful
        redirect_to '/pins'
-      # save was successful
       format.json {@pins << @pin}
-      
      end
-    end
-      
-#     else
-#       # If we have errors render the form again   
-#       render 'new'
-#     end
-    
+    end  
   end
 
+  #/pins/new(.:format) get
 def new 
   render nothing: true
     if pin_params
-        # If data submitted already by the form we call the create method
-        #create
         return
     end
 end
   
+  #/pins/:id(.:format), get
   def edit
-   # if pin_params
-    #update
-   # return
-    #end
     @user =  current_user
     @pin = current_user.pins.find_by(id: params[:id])
-    
-    
   end
-  
+
+  #'/pins/:id(.:format)' put
   def update
     @pin = current_user.pins.find_by(id: params[:id])
     if @pin.update_attributes(pin_params)
@@ -88,12 +52,13 @@ end
     end
   end
   
+  #find current pin
    def current_pin
     @current_pin ||= Pin.find_by(id: params[:id])
   end
   
+  #'/pins' get, creates hash that is rendered as markers in index view using gmaps4rails
   def index
-    #debugger
     @current_pin ||= Pin.find_by(id: params[:id])
     @id = current_user.id
     @pinsVisited = current_user.pins_visited
@@ -111,20 +76,18 @@ end
     
   end
   
-  
+  #/pins/:id(.:format) delete 
   def destroy
-    #render nothing: true
     Pin.find(params[:id]).destroy
     render '/pins/index'
   end
   
+  #checks to see if the current user is the one who created the pin
   def correct_user
       @pin = current_user.pins.find_by(id: params[:id])
       redirect_to root_url if @pin.nil?
-    end
+   end
     
- 
-  
   private 
   def pin_params
     params.require(:pin).permit(:latitude, :longitude, :user_id, :activity_type, :comment, :name)

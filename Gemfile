@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem "paperclip", "~> 4.2"
+
 gem 'bootstrap_form'
 
 gem 'hirb'

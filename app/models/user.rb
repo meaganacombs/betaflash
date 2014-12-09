@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
   has_secure_password
   validates :password, length: { minimum: 6 }
-  #Shas_and_belongs_to_many :pins
   has_many :pins
   
     def User.new_remember_token

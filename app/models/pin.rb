@@ -1,15 +1,8 @@
 class Pin < ActiveRecord::Base
-  #geocoded_by :address
-  #after_validation :geocode
-  geocoded_by :address
-  reverse_geocoded_by :latitude, :longitude
+  geocoded_by :address #geocoder gem, gets lat&lng by geocoding address
+  reverse_geocoded_by :latitude, :longitude #geocoder gem, gets address by reverse geocode lt&lng
   after_validation :geocode, :reverse_geocode
-
- # has_and_belongs_to_many :users
-  
   belongs_to :user
   has_many :comments
-  default_scope -> { order('created_at DESC') }
-  #validates :user_id, presence: true
-  #validates :activity_type, presence: true
+  default_scope -> { order('created_at DESC') } #most recent at the beginning
 end

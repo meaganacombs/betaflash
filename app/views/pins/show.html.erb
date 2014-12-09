@@ -1,4 +1,4 @@
-
+<!-- comments page, shows comments associated with pin based on id, show action in pins controller-->
 <div id = "commentHeader" style= "align:center">
   <h2>They call this place: <b><%= @pin.name %></b></h2>
   <h2>Best For: <b><%= @pin.activity_type %></b></h2>
@@ -6,15 +6,15 @@
 <h5><i>here's what other adventurers have to say about this site</i></h5>
 
 <div style = "align:center">
+  <!-- table for displaying comments -->
 <table class="table table-bordered">
   <thead>
     <tr style = "background: #29663D">
       <th style = "color: white">User</th>
       <th style = "color: white">Comment</th>
+      <th style = "color: white">Photo</th>
       <th></th>
-     
-      
-    </tr>
+     </tr>
   </thead>
   <tbody>
     <% if (@comments.nil?) %>
@@ -22,16 +22,25 @@
     <% else %>
 <% @comments.each do |comment| %>
     <tr>
-      
       <td><%= find_user_name(comment) %></td>
       <td> <%= comment.content %> <%= comment.created_at.strftime("(%I:%M%p)") %>
+        <% if (comment.avatar?) %>
+        <td><%= image_tag comment.avatar.url %>
+          <!--only allow the user who added the photo to remove it -->
+         <% if (comment.user_id == @user.id) %>
+        <br><%= link_to 'Remove photo', remove_comment_photo_path(:id=>comment.id) %>
+        <% end %>
+        <% end %>
+    </td>
+     <!-- only allow the user who created the comment to edit/delete it-->
       <% if (comment.user_id == @user.id) %>
-      <td align = "right">
+      <td class = "editDestroy" align = "right">
       <%= link_to 'Edit', edit_comment_path(comment, :user_id => @user.id, :comment_id => comment.id)  %>
       <%= link_to 'Destroy', comment_path(comment.id, :user_id => @user.id),  method: :delete, data: { confirm: 'Are you sure?' } %>
       </td>
       <% end %>
     </tr>
+   
     <% end %>
   <% end %>
   </tbody>
@@ -42,14 +51,14 @@
 <br>
 
 <h2>what did you think of this site?</h2>
-
 <div align="center">
+  <!-- rails helper for creating form for adding new comment to the current pin being viewed, submit calls create action in comments controller-->
 <%= form_for :comment, :url =>{:action => "create",  :controller => "comments", :method => :post} do |f| %>
-
+<!-- text area for comment content and file field for selecting a file to add to comment -->
+  <%= f.text_area :content, :size => "100x10"%><br>
+  <%= f.file_field :avatar %>
   
-
-  <%= f.text_area :content, :size => "100x10"%>
-  
+  <!-- create action in commment controller needs foreign keys user.id and pin.id -->
 <%= f.hidden_field :user_id, :value => @user.id %>
 <%= f.hidden_field :pin_id, :value => @pin.id %>
  

@@ -78,11 +78,22 @@ table {
   background-color: #ADEBAD;
   border: 1px black;
 }
-
+/*  comment box on comments page*/
 #commentHeader {
     background-color: lightgrey;
     padding: 15px;
     border: 5px solid black;
     margin: 25px;
     align: center;
+} 
+
+/* images posted in comment box */
+img {
+  padding: 10px;
+  
+}
+
+/* edit and destroy buttons for each comment */
+.editDestroy {
+  float: right;
 }
