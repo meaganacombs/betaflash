@@ -1,0 +1,27 @@
+<!-- edit page for editing pin activity type and name, edit action of pin controller -->
+
+<!--display pin info -->
+<div><b>Latitude: </b><%= @pin.latitude %></div><br>
+<div><b> Longitude: </b><%= @pin.latitude %></div><br>
+<div><b> Address: </b><%= @pin.address %></div><br>
+
+
+
+<!-- use rails helper form_for to create form for editing pin info, fills inputs with attributes if they have already been set, put request to update pin row in database -->
+<%= form_for :pin, url: pin_path, method: :put do |f| %>
+
+<%= f.label :activity_type %>
+<%= f.text_field :activity_type %><br>
+
+<%= f.label :site_name %>
+<%= f.text_field :name %><br>
+
+
+<br>
+
+<%= f.submit "Save changes", class: "btn btn-large btn-primary" %>
+<% end %>
+<br>
+<!-- link to comment page for the current pin being updated -->
+<%= link_to "Click here to add comments!",{action: 'show',  id: @pin.id, :method => :get  } %>
+
